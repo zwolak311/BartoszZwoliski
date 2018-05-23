@@ -25,13 +25,14 @@ public class LeagueTablePOJO {
     }
 
     public class Standing {
-        String position, teamName, points, playedGames, teamId, wins, draws, losses, crestURI;
+        String teamName, points, playedGames, teamId, wins, draws, crestURI;
+        int losses, position;
 
-        public String getPosition() {
+        public int getPosition() {
             return position;
         }
 
-        public void setPosition(String position) {
+        public void setPosition(int position) {
             this.position = position;
         }
 
@@ -84,14 +85,13 @@ public class LeagueTablePOJO {
             this.draws = draws;
         }
 
-        public String getLosses() {
+        public int getLosses() {
             return losses;
         }
 
-        public void setLosses(String losses) {
+        public void setLosses(int losses) {
             this.losses = losses;
         }
-
 
         public String getCrestURI() {
             return crestURI;

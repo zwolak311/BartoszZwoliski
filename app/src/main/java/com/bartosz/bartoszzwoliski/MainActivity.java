@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.bartosz.bartoszzwoliski.API.Caller;
 import com.bartosz.bartoszzwoliski.API.CurrentLeauge;
-import com.bartosz.bartoszzwoliski.LeagueTabel.LeagueListAdapter;
+import com.bartosz.bartoszzwoliski.tabel.LeagueTable;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, LeagueListAdapter.LeagueInterface {
     @BindView(R.id.recycleView) RecyclerView recyclerView;
     @BindView(R.id.swipeMain) SwipeRefreshLayout swipeRefreshLayout;
 
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        leagueListAdapter = new LeagueListAdapter(currentLeagues, this);
+        leagueListAdapter = new LeagueListAdapter(currentLeagues, this, this);
         setupAdapter();
         api = new Caller();
         leagueListPOJOCall = api.getApi().getLeagueList();
@@ -59,9 +59,27 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
 
+    @Override
+    public void onItemClickListner(int position) {
+
+        LeagueTable leagueTable = new LeagueTable();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("leagueId", currentLeagues.get(position).getId() + "");
+
+        leagueTable.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.main, leagueTable).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void onDateSet() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
     void getLeagueList(){
 
-        leagueListPOJOCall.enqueue(new Callback<ArrayList<CurrentLeauge>>() {
+        leagueListPOJOCall.clone().enqueue(new Callback<ArrayList<CurrentLeauge>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<CurrentLeauge>> call, @NonNull Response<ArrayList<CurrentLeauge>> response) {
 
