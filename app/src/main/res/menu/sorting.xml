@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/positionItem"
+        android:title="Pozycja"/>
+    <item
+        android:id="@+id/nameItem"
+        android:title="Nazwa"/>
+    <item
+        android:id="@+id/lossesItem"
+        android:title="Przegrane"/>
+
+
+</menu>
