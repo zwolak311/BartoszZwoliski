@@ -1,4 +1,4 @@
-package com.bartosz.bartoszzwoliski;
+package com.bartosz.bartoszzwoliski.main;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bartosz.bartoszzwoliski.API.CurrentLeauge;
+import com.bartosz.bartoszzwoliski.POJO.LeagueSimpleNamePOJO;
+import com.bartosz.bartoszzwoliski.R;
 
 import java.util.ArrayList;
 
@@ -17,21 +18,20 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LeagueListAdapter extends RecyclerView.Adapter<LeagueListAdapter.LeagueListHolder> {
-    ArrayList<CurrentLeauge> currentLeagues;
-    LayoutInflater layoutInflater;
-    LeagueInterface leagueInterface;
+    private ArrayList<LeagueSimpleNamePOJO> currentLeagues;
+    private LayoutInflater layoutInflater;
+    private LeagueInterface leagueInterface;
 
 
 
-    public void notifyListDateChanged(ArrayList<CurrentLeauge> currentLeagues){
+    public void notifyListDateChanged(ArrayList<LeagueSimpleNamePOJO> currentLeagues){
         this.currentLeagues = currentLeagues;
         notifyDataSetChanged();
 
         leagueInterface.onDateSet();
-//        swipeRefreshLayout.setRefreshing(false);
     }
 
-    public LeagueListAdapter(ArrayList<CurrentLeauge> currentLeagues, Context context, LeagueInterface leagueInterface) {
+    LeagueListAdapter(ArrayList<LeagueSimpleNamePOJO> currentLeagues, Context context, LeagueInterface leagueInterface) {
         this.leagueInterface = leagueInterface;
         this.currentLeagues = currentLeagues;
         this.layoutInflater = LayoutInflater.from(context);
@@ -57,17 +57,7 @@ public class LeagueListAdapter extends RecyclerView.Adapter<LeagueListAdapter.Le
 
         @OnClick(R.id.leagueLayout)
         void onClick(){
-//            LeagueTable leagueTable = new LeagueTable();
-//
-//            Bundle bundle = new Bundle();
-//            bundle.putString("leagueId", currentLeagues.get(position).getId() + "");
-//
-//            leagueTable.setArguments(bundle);
-
-            leagueInterface.onItemClickListner(position);
-
-//            getSupportFragmentManager().beginTransaction().replace(R.id.main, leagueTable).addToBackStack(null).commit();
-
+            leagueInterface.onItemClickListener(position);
         }
 
     }
@@ -92,9 +82,9 @@ public class LeagueListAdapter extends RecyclerView.Adapter<LeagueListAdapter.Le
 
     public interface LeagueInterface{
 
-        public void onItemClickListner(int position);
+        void onItemClickListener(int position);
 
-        public void onDateSet();
+        void onDateSet();
 
     }
 

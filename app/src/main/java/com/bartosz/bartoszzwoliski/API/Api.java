@@ -1,5 +1,8 @@
 package com.bartosz.bartoszzwoliski.API;
 
+import com.bartosz.bartoszzwoliski.POJO.LeagueSimpleNamePOJO;
+import com.bartosz.bartoszzwoliski.POJO.LeagueTablePOJO;
+
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -10,7 +13,7 @@ public interface Api {
 
 
     @GET("v1/competitions/?season=2015")
-    Call<ArrayList<CurrentLeauge>> getLeagueList();
+    Call<ArrayList<LeagueSimpleNamePOJO>> getLeagueList();
 
     @GET("v1/competitions/{leagueId}/leagueTable")
     Call<LeagueTablePOJO> getLeagueTable(@Path("leagueId")String leagueId);

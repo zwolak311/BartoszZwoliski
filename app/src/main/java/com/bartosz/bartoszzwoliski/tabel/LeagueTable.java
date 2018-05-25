@@ -15,9 +15,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.bartosz.bartoszzwoliski.API.Caller;
-import com.bartosz.bartoszzwoliski.API.LeagueTablePOJO;
+import com.bartosz.bartoszzwoliski.API.LeagueTableInterface;
+import com.bartosz.bartoszzwoliski.POJO.LeagueTablePOJO;
+import com.bartosz.bartoszzwoliski.API.MyRetrofit;
 import com.bartosz.bartoszzwoliski.R;
 
 import java.util.Collections;
@@ -26,18 +28,18 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class LeagueTable extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SwipeController.SwipeControllerListener, CurrentLeagueAdapter.TableLeagueInterface{
+public class LeagueTable extends Fragment
+        implements SwipeRefreshLayout.OnRefreshListener, SwipeController.SwipeControllerListener,
+        CurrentLeagueAdapter.TableLeagueInterface, LeagueTableInterface {
+
     @BindView(R.id.recycleView2) RecyclerView recyclerView;
     @BindView(R.id.swipeTable) SwipeRefreshLayout swipeRefreshLayout;
 
     String leagueId;
-    LeagueTablePOJO currentLeagues = new LeagueTablePOJO();
+    LeagueTablePOJO leagueTable = new LeagueTablePOJO();
     CurrentLeagueAdapter adapter;
-    Caller api;
+    MyRetrofit api;
 
     @Nullable
     @Override
@@ -45,12 +47,15 @@ public class LeagueTable extends Fragment implements SwipeRefreshLayout.OnRefres
         View view = inflater.inflate(R.layout.leauge_table, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-        api = new Caller();
+
         swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(this);
 
+        api = new MyRetrofit(this);
+
         assert getArguments() != null;
         leagueId = getArguments().getString("leagueId");
+
         return view;
     }
 
@@ -58,14 +63,15 @@ public class LeagueTable extends Fragment implements SwipeRefreshLayout.OnRefres
     @Override
     public void onResume() {
         super.onResume();
-        setupAdapter(currentLeagues);
-        getLeagueTable();
+        setupAdapter(leagueTable);
+        api.getLeagueTable(leagueId);
     }
 
     @Override
     public void onRefresh() {
-        getLeagueTable();
+        api.getLeagueTable(leagueId);
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -79,76 +85,43 @@ public class LeagueTable extends Fragment implements SwipeRefreshLayout.OnRefres
 
         switch (item.getItemId()) {
             case R.id.positionItem:
-
-                Collections.sort(currentLeagues.getStanding(), new Comparator<LeagueTablePOJO.Standing>() {
+                Collections.sort(leagueTable.getStanding(), new Comparator<LeagueTablePOJO.Standing>() {
                     @Override
                     public int compare(LeagueTablePOJO.Standing o1, LeagueTablePOJO.Standing o2) {
                         Integer i1 = o1.getPosition();
                         Integer i2 = o2.getPosition();
-
                         return i1.compareTo(i2);
                     }
                 });
-
                 break;
             case R.id.nameItem:
-
-                Collections.sort(currentLeagues.getStanding(), new Comparator<LeagueTablePOJO.Standing>() {
+                Collections.sort(leagueTable.getStanding(), new Comparator<LeagueTablePOJO.Standing>() {
                     @Override
                     public int compare(LeagueTablePOJO.Standing o1, LeagueTablePOJO.Standing o2) {
                         return o1.getTeamName().compareTo(o2.getTeamName());
                     }
                 });
-
                 break;
             case R.id.lossesItem:
-
-
-                Collections.sort(currentLeagues.getStanding(), new Comparator<LeagueTablePOJO.Standing>() {
+                Collections.sort(leagueTable.getStanding(), new Comparator<LeagueTablePOJO.Standing>() {
                     @Override
                     public int compare(LeagueTablePOJO.Standing o1, LeagueTablePOJO.Standing o2) {
-
                         Integer i1 = o1.getLosses();
                         Integer i2 = o2.getLosses();
-
                         return i2.compareTo(i1);
                     }
                 });
-
                 break;
-
         }
 
         adapter.notifyDataSetChanged();
         return true;
     }
 
-    void getLeagueTable(){
 
-        Call<LeagueTablePOJO> call = api.getApi().getLeagueTable(leagueId);
-
-        call.clone().enqueue(new Callback<LeagueTablePOJO>() {
-            @Override
-            public void onResponse(@NonNull Call<LeagueTablePOJO> call, @NonNull Response<LeagueTablePOJO> response) {
-
-                if(response.body() != null) {
-                    currentLeagues = response.body();
-                    adapter.notifyListDataChanged(currentLeagues);
-                }
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<LeagueTablePOJO> call, @NonNull Throwable t) {
-
-            }
-        });
-    }
 
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-
-    }
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) { }
 
 
 
@@ -156,7 +129,6 @@ public class LeagueTable extends Fragment implements SwipeRefreshLayout.OnRefres
 
         ItemTouchHelper.SimpleCallback simpleCallback = new SwipeController(0, ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
-
 
         adapter = new CurrentLeagueAdapter(getActivity(), currentLeagues, this);
 
@@ -174,5 +146,17 @@ public class LeagueTable extends Fragment implements SwipeRefreshLayout.OnRefres
     @Override
     public void onDateSet() {
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+
+    @Override
+    public void onResponse(LeagueTablePOJO leagueTable) {
+        this.leagueTable = leagueTable;
+        adapter.notifyListDataChanged(leagueTable);
+    }
+
+    @Override
+    public void onFailure(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }

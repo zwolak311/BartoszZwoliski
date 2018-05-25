@@ -1,5 +1,6 @@
 package com.bartosz.bartoszzwoliski.tabel;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -11,18 +12,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ahmadrosid.svgloader.SvgLoader;
-import com.bartosz.bartoszzwoliski.API.LeagueTablePOJO;
+import com.bartosz.bartoszzwoliski.POJO.LeagueTablePOJO;
 import com.bartosz.bartoszzwoliski.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnTouch;
 
 public class CurrentLeagueAdapter extends RecyclerView.Adapter<CurrentLeagueAdapter.CurrentLeagueHolder> {
-    LayoutInflater inflater;
-    LeagueTablePOJO arrayList;
-    TableLeagueInterface tableLeagueInterface;
-    Activity activity;
+    private LayoutInflater inflater;
+    private LeagueTablePOJO arrayList;
+    private TableLeagueInterface tableLeagueInterface;
+    private Activity activity;
 
 
     public void notifyListDataChanged(LeagueTablePOJO arrayList){
@@ -41,7 +41,7 @@ public class CurrentLeagueAdapter extends RecyclerView.Adapter<CurrentLeagueAdap
     class CurrentLeagueHolder extends RecyclerView.ViewHolder {
         LeagueTablePOJO.Standing standing;
 
-        @BindView(R.id.foreground) public ConstraintLayout foregound;
+        @BindView(R.id.foreground) public ConstraintLayout foreground;
 
 
         @BindView(R.id.position)
@@ -64,6 +64,7 @@ public class CurrentLeagueAdapter extends RecyclerView.Adapter<CurrentLeagueAdap
         }
 
 
+        @SuppressLint("SetTextI18n")
         void bindView(int position){
             standing = arrayList.getStanding().get(position);
 
@@ -84,20 +85,6 @@ public class CurrentLeagueAdapter extends RecyclerView.Adapter<CurrentLeagueAdap
                     .with(activity)
                     .setPlaceHolder(R.mipmap.ic_launcher, R.mipmap.ic_launcher)
                     .load(url, imageView);
-        }
-
-
-        @OnTouch({R.id.foreground})
-        boolean onTouch(){
-
-//                String url = arrayList.getStanding().get(itemPosition).getCrestURI();
-//
-//                SvgLoader.pluck()
-//                        .with(getActivity())
-//                        .setPlaceHolder(R.mipmap.ic_launcher, R.mipmap.ic_launcher)
-//                        .load(url, imageView);
-
-            return true;
         }
     }
 
@@ -121,8 +108,6 @@ public class CurrentLeagueAdapter extends RecyclerView.Adapter<CurrentLeagueAdap
 
 
     public interface TableLeagueInterface{
-
-        public void onDateSet();
-
+        void onDateSet();
     }
 }

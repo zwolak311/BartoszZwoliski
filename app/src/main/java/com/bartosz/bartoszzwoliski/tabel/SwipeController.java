@@ -26,7 +26,7 @@ public class SwipeController extends ItemTouchHelper.SimpleCallback {
         @Override
         public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
             if (viewHolder != null) {
-                final View foregroundView = ((CurrentLeagueAdapter.CurrentLeagueHolder) viewHolder).foregound;
+                final View foregroundView = ((CurrentLeagueAdapter.CurrentLeagueHolder) viewHolder).foreground;
 
                 getDefaultUIUtil().onSelected(foregroundView);
             }
@@ -36,14 +36,14 @@ public class SwipeController extends ItemTouchHelper.SimpleCallback {
         public void onChildDrawOver(Canvas c, RecyclerView recyclerView,
                                     RecyclerView.ViewHolder viewHolder, float dX, float dY,
                                     int actionState, boolean isCurrentlyActive) {
-            final View foregroundView = ((CurrentLeagueAdapter.CurrentLeagueHolder) viewHolder).foregound;
+            final View foregroundView = ((CurrentLeagueAdapter.CurrentLeagueHolder) viewHolder).foreground;
             getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY,
                     actionState, isCurrentlyActive);
         }
 
         @Override
         public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            final View foregroundView = ((CurrentLeagueAdapter.CurrentLeagueHolder) viewHolder).foregound;
+            final View foregroundView = ((CurrentLeagueAdapter.CurrentLeagueHolder) viewHolder).foreground;
             getDefaultUIUtil().clearView(foregroundView);
         }
 
@@ -51,7 +51,7 @@ public class SwipeController extends ItemTouchHelper.SimpleCallback {
         public void onChildDraw(Canvas c, RecyclerView recyclerView,
                                 RecyclerView.ViewHolder viewHolder, float dX, float dY,
                                 int actionState, boolean isCurrentlyActive) {
-            final View foregroundView = ((CurrentLeagueAdapter.CurrentLeagueHolder) viewHolder).foregound;
+            final View foregroundView = ((CurrentLeagueAdapter.CurrentLeagueHolder) viewHolder).foreground;
 
             getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY,
                     actionState, isCurrentlyActive);
