@@ -5,11 +5,13 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ahmadrosid.svgloader.SvgLoader;
 import com.bartosz.bartoszzwoliski.POJO.LeagueTablePOJO;
@@ -81,10 +83,13 @@ public class CurrentLeagueAdapter extends RecyclerView.Adapter<CurrentLeagueAdap
 
             String url = standing.getCrestURI();
 
-            SvgLoader.pluck()
-                    .with(activity)
-                    .setPlaceHolder(R.mipmap.ic_launcher, R.mipmap.ic_launcher)
-                    .load(url, imageView);
+            if(url != null) {
+                Log.d("sssdddaaa", url);
+                SvgLoader.pluck()
+                        .with(activity)
+                        .setPlaceHolder(R.mipmap.ic_launcher, R.mipmap.ic_launcher)
+                        .load(url, imageView);
+            }
         }
     }
 

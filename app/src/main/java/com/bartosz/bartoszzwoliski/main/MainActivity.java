@@ -1,6 +1,7 @@
 package com.bartosz.bartoszzwoliski.main;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     ArrayList<LeagueSimpleNamePOJO> currentLeagues = new ArrayList<>();
 
     MyRetrofit api;
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,12 +95,20 @@ public class MainActivity extends AppCompatActivity
             this.currentLeagues = currentLeagues;
             leagueListAdapter.notifyListDateChanged(currentLeagues);
         }
+
+        if(snackbar != null)
+            snackbar.dismiss();
+
     }
 
 
     @Override
     public void onFailure(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        swipeRefreshLayout.setRefreshing(false);
+        snackbar = Snackbar
+                .make(getCurrentFocus(), message, Snackbar.LENGTH_INDEFINITE);
+
+        snackbar.show();
     }
 
 

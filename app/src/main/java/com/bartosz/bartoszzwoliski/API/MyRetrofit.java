@@ -1,6 +1,8 @@
 package com.bartosz.bartoszzwoliski.API;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.bartosz.bartoszzwoliski.POJO.LeagueSimpleNamePOJO;
 import com.bartosz.bartoszzwoliski.POJO.LeagueTablePOJO;
@@ -23,18 +25,18 @@ public class MyRetrofit {
     private LeagueListInterface leagueListInterface;
     private LeagueTableInterface leagueTableInterface;
 
-    public MyRetrofit(LeagueListInterface leagueListInterface){
+    public MyRetrofit(LeagueListInterface leagueListInterface) {
         this.leagueListInterface = leagueListInterface;
         setupApi();
     }
 
 
-    public MyRetrofit(LeagueTableInterface leagueTableInterface){
+    public MyRetrofit(LeagueTableInterface leagueTableInterface) {
         this.leagueTableInterface = leagueTableInterface;
         setupApi();
     }
 
-    private void setupApi(){
+    private void setupApi() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -60,7 +62,7 @@ public class MyRetrofit {
     }
 
 
-    public void getLeagueList(){
+    public void getLeagueList() {
 
 
         Call<ArrayList<LeagueSimpleNamePOJO>> callLeagueList = api.getLeagueList();
@@ -69,8 +71,10 @@ public class MyRetrofit {
             @Override
             public void onResponse(@NonNull Call<ArrayList<LeagueSimpleNamePOJO>> call, @NonNull Response<ArrayList<LeagueSimpleNamePOJO>> response) {
 
-                leagueListInterface.onResponse(response.body());
-
+                if (response.body() != null)
+                    leagueListInterface.onResponse(response.body());
+                else
+                    leagueListInterface.onFailure("Błąd połączenia z API");
             }
 
             @Override
@@ -83,7 +87,7 @@ public class MyRetrofit {
     }
 
 
-    public void getLeagueTable(String leagueId){
+    public void getLeagueTable(String leagueId) {
 
         Call<LeagueTablePOJO> callLeagueTable = api.getLeagueTable(leagueId);
 
@@ -91,7 +95,10 @@ public class MyRetrofit {
             @Override
             public void onResponse(@NonNull Call<LeagueTablePOJO> call, @NonNull Response<LeagueTablePOJO> response) {
 
-                leagueTableInterface.onResponse(response.body());
+                if (response.body() != null) {
+                    leagueTableInterface.onResponse(response.body());
+                } else
+                    leagueTableInterface.onFailure("Błąd połączenia z API");
 
             }
 

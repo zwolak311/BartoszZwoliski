@@ -12,7 +12,7 @@ import retrofit2.http.Path;
 public interface Api {
 
 
-    @GET("v1/competitions/?season=2015")
+    @GET("v1/competitions/?season=2016")
     Call<ArrayList<LeagueSimpleNamePOJO>> getLeagueList();
 
     @GET("v1/competitions/{leagueId}/leagueTable")

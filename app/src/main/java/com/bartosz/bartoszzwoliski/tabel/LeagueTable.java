@@ -3,6 +3,7 @@ package com.bartosz.bartoszzwoliski.tabel;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -40,6 +41,8 @@ public class LeagueTable extends Fragment
     LeagueTablePOJO leagueTable = new LeagueTablePOJO();
     CurrentLeagueAdapter adapter;
     MyRetrofit api;
+    View view;
+    Snackbar snackbar;
 
     @Nullable
     @Override
@@ -152,11 +155,21 @@ public class LeagueTable extends Fragment
     @Override
     public void onResponse(LeagueTablePOJO leagueTable) {
         this.leagueTable = leagueTable;
+
+        if(snackbar != null)
+            snackbar.dismiss();
+
         adapter.notifyListDataChanged(leagueTable);
     }
 
     @Override
     public void onFailure(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+
+        swipeRefreshLayout.setRefreshing(false);
+        snackbar = Snackbar
+                .make(this.getView(), message, Snackbar.LENGTH_INDEFINITE);
+
+        snackbar.show();
+
     }
 }

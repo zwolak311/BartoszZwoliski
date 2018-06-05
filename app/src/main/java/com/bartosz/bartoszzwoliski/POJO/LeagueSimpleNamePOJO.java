@@ -3,7 +3,7 @@ package com.bartosz.bartoszzwoliski.POJO;
 public class LeagueSimpleNamePOJO {
 
     int id;
-    String caption;
+    String caption, error;
 
     public int getId() {
         return id;
@@ -21,4 +21,12 @@ public class LeagueSimpleNamePOJO {
         this.caption = caption;
     }
 
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
 }

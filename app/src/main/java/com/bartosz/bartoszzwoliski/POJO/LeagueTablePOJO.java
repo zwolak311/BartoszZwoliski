@@ -4,9 +4,17 @@ import java.util.ArrayList;
 
 public class LeagueTablePOJO {
 
-    String leagueCaption;
+    String leagueCaption, error;
     ArrayList<Standing> standing = new ArrayList<>();
 
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
 
     public String getLeagueCaption() {
         return leagueCaption;
